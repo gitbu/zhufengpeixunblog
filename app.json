@@ -1,0 +1,14 @@
+{
+  "pages": [
+    "pages/address-list/address-list",
+    "pages/address-edit/address-edit"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#07c160",
+    "navigationBarTitleText": "收货地址管理",
+    "navigationBarTextStyle": "white"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
