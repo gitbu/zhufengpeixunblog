@@ -19,17 +19,33 @@ Page({
     this.loadAddressList()
   },
 
-  // 加载地址列表
+  // 加载地址列表（支持云同步）
   loadAddressList() {
-    const addressList = addressStorage.getAddressList()
-    this.setData({
-      addressList,
-      displayList: addressList
+    wx.showLoading({
+      title: '加载中...',
+      mask: true
     })
-    // 如果有搜索关键词，重新过滤
-    if (this.data.searchKeyword) {
-      this.filterAddress(this.data.searchKeyword)
-    }
+
+    addressStorage.getAddressList()
+      .then(addressList => {
+        this.setData({
+          addressList,
+          displayList: addressList
+        })
+        // 如果有搜索关键词，重新过滤
+        if (this.data.searchKeyword) {
+          this.filterAddress(this.data.searchKeyword)
+        }
+        wx.hideLoading()
+      })
+      .catch(err => {
+        console.error('加载地址列表失败', err)
+        wx.hideLoading()
+        wx.showToast({
+          title: '加载失败',
+          icon: 'none'
+        })
+      })
   },
 
   // 搜索输入
@@ -148,20 +164,32 @@ Page({
       confirmColor: '#fa5151',
       success: (res) => {
         if (res.confirm) {
+          wx.showLoading({ title: '删除中...' })
+
           addressStorage.deleteAddress(id)
+            .then(() => {
+              // 重置滑动状态
+              this.setData({
+                touchOffset: 0,
+                touchingId: null
+              })
 
-          // 重置滑动状态
-          this.setData({
-            touchOffset: 0,
-            touchingId: null
-          })
+              this.loadAddressList()
 
-          this.loadAddressList()
-
-          wx.showToast({
-            title: '删除成功',
-            icon: 'success'
-          })
+              wx.hideLoading()
+              wx.showToast({
+                title: '删除成功',
+                icon: 'success'
+              })
+            })
+            .catch(err => {
+              console.error('删除失败', err)
+              wx.hideLoading()
+              wx.showToast({
+                title: '删除失败',
+                icon: 'none'
+              })
+            })
         } else {
           // 取消删除，恢复位置
           this.setData({
@@ -176,13 +204,27 @@ Page({
   // 设置默认地址
   onSetDefault(e) {
     const { id } = e.currentTarget.dataset
-    addressStorage.setDefaultAddress(id)
-    this.loadAddressList()
 
-    wx.showToast({
-      title: '设置成功',
-      icon: 'success'
-    })
+    wx.showLoading({ title: '设置中...' })
+
+    addressStorage.setDefaultAddress(id)
+      .then(() => {
+        this.loadAddressList()
+
+        wx.hideLoading()
+        wx.showToast({
+          title: '设置成功',
+          icon: 'success'
+        })
+      })
+      .catch(err => {
+        console.error('设置失败', err)
+        wx.hideLoading()
+        wx.showToast({
+          title: '设置失败',
+          icon: 'none'
+        })
+      })
   },
 
   // 选择地址（可用于从其他页面选择地址）

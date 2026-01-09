@@ -127,24 +127,34 @@ Page({
 
     const { id, formData } = this.data
 
-    if (id) {
-      // 编辑模式
-      addressStorage.updateAddress(id, formData)
-      wx.showToast({
-        title: '修改成功',
-        icon: 'success'
-      })
-    } else {
-      // 新增模式
-      addressStorage.addAddress(formData)
-      wx.showToast({
-        title: '添加成功',
-        icon: 'success'
-      })
-    }
+    wx.showLoading({
+      title: id ? '保存中...' : '添加中...',
+      mask: true
+    })
 
-    setTimeout(() => {
-      wx.navigateBack()
-    }, 1500)
+    const promise = id
+      ? addressStorage.updateAddress(id, formData)
+      : addressStorage.addAddress(formData)
+
+    promise
+      .then(() => {
+        wx.hideLoading()
+        wx.showToast({
+          title: id ? '修改成功' : '添加成功',
+          icon: 'success'
+        })
+
+        setTimeout(() => {
+          wx.navigateBack()
+        }, 1500)
+      })
+      .catch(err => {
+        console.error('保存地址失败', err)
+        wx.hideLoading()
+        wx.showToast({
+          title: '保存失败',
+          icon: 'none'
+        })
+      })
   }
 })
