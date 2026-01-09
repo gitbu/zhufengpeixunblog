@@ -1,32 +1,74 @@
 <view class="container">
+  <!-- 搜索框 -->
+  <view class="search-bar" wx:if="{{addressList.length > 0}}">
+    <view class="search-input-wrapper">
+      <icon class="search-icon" type="search" size="16" color="#999" />
+      <input
+        class="search-input"
+        placeholder="搜索收货人、手机号或地址"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput" />
+      <icon
+        wx:if="{{searchKeyword}}"
+        class="clear-icon"
+        type="clear"
+        size="16"
+        color="#999"
+        bindtap="onClearSearch" />
+    </view>
+  </view>
+
   <!-- 地址列表 -->
-  <view class="address-list" wx:if="{{addressList.length > 0}}">
-    <view class="address-item" wx:for="{{addressList}}" wx:key="id">
-      <view class="address-content" bindtap="onAddressSelect" data-id="{{item.id}}">
-        <view class="address-info">
-          <view class="address-header">
-            <text class="name">{{item.name}}</text>
-            <text class="phone">{{item.phone}}</text>
-            <view class="default-tag" wx:if="{{item.isDefault}}">默认</view>
+  <view class="address-list" wx:if="{{displayList.length > 0}}">
+    <view class="address-item-wrapper" wx:for="{{displayList}}" wx:key="id">
+      <view
+        class="address-item"
+        style="transform: translateX({{item.id === touchingId ? touchOffset : 0}}px); transition: {{touching ? 'none' : 'transform 0.3s'}}"
+        bindtouchstart="onTouchStart"
+        bindtouchmove="onTouchMove"
+        bindtouchend="onTouchEnd"
+        data-id="{{item.id}}"
+        data-index="{{index}}">
+        <view class="address-content" bindtap="onAddressSelect" data-id="{{item.id}}">
+          <view class="address-info">
+            <view class="address-header">
+              <view class="address-tag" wx:if="{{item.tag}}">{{item.tag}}</view>
+              <text class="name">{{item.name}}</text>
+              <text class="phone">{{item.phone}}</text>
+              <view class="default-tag" wx:if="{{item.isDefault}}">默认</view>
+            </view>
+            <view class="address-detail">
+              <text>{{item.province}} {{item.city}} {{item.district}} {{item.detail}}</text>
+            </view>
           </view>
-          <view class="address-detail">
-            <text>{{item.province}} {{item.city}} {{item.district}} {{item.detail}}</text>
-          </view>
+        </view>
+
+        <view class="address-actions">
+          <button class="action-btn" bindtap="onEdit" data-id="{{item.id}}">编辑</button>
+          <button class="action-btn" bindtap="onSetDefault" wx:if="{{!item.isDefault}}" data-id="{{item.id}}">设为默认</button>
         </view>
       </view>
 
-      <view class="address-actions">
-        <button class="action-btn" bindtap="onEdit" data-id="{{item.id}}">编辑</button>
-        <button class="action-btn" bindtap="onDelete" data-id="{{item.id}}">删除</button>
-        <button class="action-btn" wx:if="{{!item.isDefault}}" bindtap="onSetDefault" data-id="{{item.id}}">设为默认</button>
+      <!-- 滑动删除按钮 -->
+      <view class="swipe-delete" bindtap="onDelete" data-id="{{item.id}}">
+        <text>删除</text>
       </view>
     </view>
+  </view>
+
+  <!-- 搜索无结果 -->
+  <view class="empty-state" wx:elif="{{addressList.length > 0 && displayList.length === 0}}">
+    <image class="empty-icon" src="/images/empty-address.png" mode="aspectFit"></image>
+    <text class="empty-text">未找到相关地址</text>
+    <text class="empty-hint">试试其他关键词</text>
   </view>
 
   <!-- 空状态 -->
   <view class="empty-state" wx:else>
     <image class="empty-icon" src="/images/empty-address.png" mode="aspectFit"></image>
     <text class="empty-text">暂无收货地址</text>
+    <text class="empty-hint">添加常用收货地址，下单更便捷</text>
+    <button class="empty-add-btn btn-primary" bindtap="onAddAddress">立即添加</button>
   </view>
 
   <!-- 添加地址按钮 -->

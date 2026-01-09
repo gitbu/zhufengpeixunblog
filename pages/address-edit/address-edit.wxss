@@ -50,6 +50,30 @@
   box-sizing: border-box;
 }
 
+/* 标签列表 */
+.tag-list {
+  display: flex;
+  gap: 20rpx;
+  flex-wrap: wrap;
+}
+
+.tag-item {
+  padding: 12rpx 32rpx;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  color: #666;
+  background-color: #f5f5f5;
+  border: 2rpx solid transparent;
+  transition: all 0.3s;
+}
+
+.tag-item.active {
+  color: #07c160;
+  background-color: #e8f7ed;
+  border-color: #07c160;
+  font-weight: 500;
+}
+
 /* Switch 表单项 */
 .form-item-switch {
   padding: 30rpx;

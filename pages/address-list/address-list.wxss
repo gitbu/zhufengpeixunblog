@@ -3,17 +3,95 @@
   padding-bottom: 120rpx;
 }
 
+/* 搜索框 */
+.search-bar {
+  padding: 20rpx;
+  background-color: white;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 32rpx;
+  padding: 16rpx 24rpx;
+}
+
+.search-icon {
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.clear-icon {
+  margin-left: 12rpx;
+  flex-shrink: 0;
+}
+
 /* 地址列表 */
 .address-list {
   padding: 20rpx;
 }
 
+.address-item-wrapper {
+  position: relative;
+  margin-bottom: 20rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  animation: fadeInUp 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+.address-item-wrapper:nth-child(1) { animation-delay: 0s; }
+.address-item-wrapper:nth-child(2) { animation-delay: 0.1s; }
+.address-item-wrapper:nth-child(3) { animation-delay: 0.2s; }
+.address-item-wrapper:nth-child(4) { animation-delay: 0.3s; }
+.address-item-wrapper:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .address-item {
+  position: relative;
+  z-index: 2;
   background-color: white;
   border-radius: 16rpx;
-  margin-bottom: 20rpx;
   overflow: hidden;
   box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s;
+}
+
+.address-item:active {
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.12);
+}
+
+.swipe-delete {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 120rpx;
+  background-color: #fa5151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 28rpx;
+  z-index: 1;
 }
 
 .address-content {
@@ -28,6 +106,15 @@
   display: flex;
   align-items: center;
   margin-bottom: 20rpx;
+}
+
+.address-tag {
+  background-color: #ff6b35;
+  color: white;
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  margin-right: 12rpx;
 }
 
 .name {
@@ -99,7 +186,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 200rpx 0;
+  padding: 100rpx 40rpx 200rpx;
 }
 
 .empty-icon {
@@ -110,8 +197,24 @@
 }
 
 .empty-text {
-  font-size: 28rpx;
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+}
+
+.empty-hint {
+  font-size: 26rpx;
   color: #999;
+  margin-bottom: 60rpx;
+}
+
+.empty-add-btn {
+  width: 400rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: 32rpx;
+  border-radius: 44rpx;
 }
 
 /* 添加按钮 */

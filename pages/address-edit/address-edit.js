@@ -3,9 +3,11 @@ const addressStorage = require('../../utils/address-storage.js')
 Page({
   data: {
     id: null,
+    tagList: ['家', '公司', '学校'],
     formData: {
       name: '',
       phone: '',
+      tag: '家',
       province: '',
       city: '',
       district: '',
@@ -39,6 +41,14 @@ Page({
     const { value } = e.detail
     this.setData({
       [`formData.${field}`]: value
+    })
+  },
+
+  // 标签选择
+  onTagSelect(e) {
+    const { tag } = e.currentTarget.dataset
+    this.setData({
+      'formData.tag': tag
     })
   },
 
